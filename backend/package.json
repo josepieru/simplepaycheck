@@ -1,7 +1,7 @@
 {
   "name": "share-place-backend",
   "version": "1.0.0",
-  "description": "Backend for the project share place",
+  "description": "Backend for the group assignment simple paycheck",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
