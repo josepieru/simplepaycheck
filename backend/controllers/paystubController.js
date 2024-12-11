@@ -75,4 +75,46 @@ const getAllPaystubs = async (req, res, next) => {
   res.status(200).json({ paystubs });
 };
 
-module.exports = { generatePaystub, getAllPaystubs };
+
+const getPaystubsByEmployeeId = async (req, res, next) => {
+  const employeeId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
+    console.log('Invalid employee ID');
+    return next(new HttpError('Invalid employee ID.', 422));
+  }
+
+  let employee;
+  try {
+    employee = await Employee.findById(employeeId);
+    if (!employee) {
+      console.log('Employee not found');
+      return next(new HttpError('Employee not found.', 404));
+    }
+  } catch (err) {
+    console.log('Error fetching employee:', err);
+    return next(new HttpError('Fetching employee failed, please try again later.', 500));
+  }
+
+  let paystubs;
+  try {
+    paystubs = await Paystub.find({ employee: employeeId }).populate({
+      path: 'employee',
+      select: 'firstname lastname phonenumber email'
+    });
+    if (paystubs.length === 0) {
+      console.log('No paystubs generated for this employee yet.')
+      return res.status(200).json({ message: 'No paystubs have been generated for this employee.', paystubs: [] });
+    }
+    console.log('Paystubs:', paystubs);
+  } catch (err) {
+    console.log('Error fetching paystubs:', err);
+    return next(new HttpError('Fetching paystubs failed, please try again later.', 500));
+  }
+
+  res.status(200).json({ paystubs });
+};
+
+
+
+module.exports = { generatePaystub, getPaystubsByEmployeeId, getAllPaystubs };
