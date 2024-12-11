@@ -14,4 +14,4 @@ const employeeSchema = new Schema({
     taxes: { type: Number, required: true },
 });
 
-module.exports = mongoose.model('employee', employeeSchema);
+module.exports = mongoose.model('Employee', employeeSchema);
