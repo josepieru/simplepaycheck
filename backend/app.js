@@ -8,6 +8,9 @@ const paystubRoutes = require('./routes/paystub-route');
 const HttpError = require('./models/http-error');
 
 const app = express();
+const cors = require('cors');
+
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(bodyParser.json());
 
